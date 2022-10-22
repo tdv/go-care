@@ -67,8 +67,7 @@ func (this *interceptor) makeKey(
 	return hash, nil
 }
 
-func (this *interceptor) restoreResponse(typ reflect.Type, buf []byte) (interface{}, error) {
-	var err error = nil
+func (this *interceptor) restoreResponse(typ reflect.Type, buf []byte) (resp interface{}, err error) {
 	defer func() {
 		if recover() != nil {
 			err = errors.New("Failed to construct new value.")
@@ -77,6 +76,7 @@ func (this *interceptor) restoreResponse(typ reflect.Type, buf []byte) (interfac
 
 	val := reflect.New(typ).Interface()
 	err = json.Unmarshal(buf, &val)
+	resp = val
 
 	return val, err
 }

@@ -16,17 +16,17 @@ type typeStorageImpl struct {
 	types map[string]reflect.Type
 }
 
-func (this *typeStorageImpl) Put(key string, val interface{}) error {
+func (this *typeStorageImpl) Put(key string, val interface{}) (err error) {
 	if len(key) == 0 {
-		return errors.New("Key must not be empty.")
+		err = errors.New("Key must not be empty.")
+		return
 	}
 
 	typ := reflect.TypeOf(val)
 	if typ == nil {
-		return errors.New("Failed to get type of the value.")
+		err = errors.New("Failed to get type of the value.")
+		return
 	}
-
-	var err error = nil
 
 	defer func() {
 		if recover() != nil {
@@ -40,7 +40,7 @@ func (this *typeStorageImpl) Put(key string, val interface{}) error {
 	defer this.mtx.Unlock()
 	this.types[key] = elem
 
-	return err
+	return
 }
 
 func (this *typeStorageImpl) Get(key string) (reflect.Type, bool) {
