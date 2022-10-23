@@ -14,7 +14,7 @@ func NewDefaultOptions() (*Options, error) {
 		Methods:    newMethodsStorage(),
 		MetaFilter: NewZeroMetaFilter(),
 		Hash:       newDefaultHash(),
-		Cache:      NewInMemoryLRUCache(1024),
+		Cache:      NewInMemoryCache(1024),
 	}
 
 	return &opts, nil
