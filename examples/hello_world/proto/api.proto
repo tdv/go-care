@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+option go_package = "github.com/tdv/go-care/examples/hello_world/proto/api";
+
+package api;
+
+service HelloWorldService {
+  rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {}
+}
+
+message SayHelloRequest {
+  string name = 1;
+}
+
+message SayHelloResponse {
+  string greeting = 1;
+}

@@ -1,0 +1,93 @@
+package main
+
+import (
+	"context"
+	"flag"
+	"fmt"
+	care "go-care"
+	api "go-care/examples/hello_world/proto/api/pb"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/reflection"
+	"google.golang.org/grpc/status"
+	"log"
+	"net"
+	"strings"
+)
+
+type server struct {
+	api.UnimplementedHelloWorldServiceServer
+}
+
+func (s *server) SayHello(
+	ctx context.Context,
+	req *api.SayHelloRequest,
+) (
+	*api.SayHelloResponse,
+	error,
+) {
+	log.Println("Calling 'SayHallo' method.")
+	m, _ := metadata.FromIncomingContext(ctx)
+	for k, v := range m {
+		log.Printf("%s = %s\n", k, strings.Join(v, "; "))
+	}
+
+	if req == nil {
+		return nil, status.Errorf(codes.InvalidArgument, "An empty request.")
+	}
+
+	if len(req.Name) == 0 {
+		return nil, status.Errorf(codes.InvalidArgument, "Empty name.")
+	}
+
+	resp := api.SayHelloResponse{
+		Greeting: "Hellol: " + req.Name,
+	}
+
+	return &resp, status.New(codes.OK, "Ok.").Err()
+}
+
+func main() {
+	var (
+		port        = flag.Int("port", 55555, "The server port.")
+		memoization = flag.Bool("memoizatoin", true, "Use response memoization.")
+	)
+
+	flag.Parse()
+	flag.Usage()
+
+	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
+	if err != nil {
+		log.Fatalf("Failed to listen the interface. Error: %v\n", err)
+	}
+
+	var grpcsrv *grpc.Server
+
+	if !*memoization {
+		grpcsrv = grpc.NewServer()
+	} else {
+		opts, err := care.NewDefaultOptions()
+		if err != nil {
+			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v", err)
+		}
+
+		opts.Methods.Add("/api.HelloWorldService/SayHello")
+
+		unary, err := care.NewServerUnaryInterceptor(opts)
+		if err != nil {
+			log.Fatalf("Failed to create server unary interceptor for the response memoization. Error: %v", err)
+		}
+
+		grpcsrv = grpc.NewServer(unary)
+	}
+
+	srv := server{}
+	api.RegisterHelloWorldServiceServer(grpcsrv, &srv)
+
+	reflection.Register(grpcsrv)
+
+	if err = grpcsrv.Serve(listener); err != nil {
+		log.Fatalf("Failed to run the server. Error: %v\n", err)
+	}
+}

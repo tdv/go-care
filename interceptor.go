@@ -6,6 +6,7 @@ import (
 	"errors"
 	"google.golang.org/grpc/metadata"
 	"reflect"
+	"sort"
 	"strings"
 )
 
@@ -22,15 +23,20 @@ func (this *interceptor) processMeta(ctx context.Context, builder *strings.Build
 		return
 	}
 
+	data := make([]string, 0)
+
 	for k, v := range md {
 		if !this.opts.MetaFilter.Allowed(k, v) {
 			continue
 		}
-		builder.WriteString(k)
-		for _, s := range v {
-			builder.WriteString(s)
-		}
+
+		sort.Strings(v)
+		data = append(data, k+strings.Join(v, ";"))
 	}
+
+	sort.Strings(data)
+	builder.WriteString(strings.Join(data, ";"))
+
 }
 
 func (this *interceptor) makeKey(
@@ -105,7 +111,7 @@ func (this *interceptor) execute(
 			typ, hasType := this.types.Get(key)
 			if hasType {
 				buf, err := this.opts.Cache.Get(key)
-				if err != nil && len(buf) > 0 {
+				if err == nil && len(buf) > 0 {
 					if resp, err := this.restoreResponse(typ, buf); err == nil {
 						return resp, nil
 					}
