@@ -124,9 +124,7 @@ func (this *interceptor) execute(
 				this.types.Put(key, resp)
 			}
 
-			go func() {
-				this.cacheResponse(key, resp)
-			}()
+			this.cacheResponse(key, resp)
 
 			return resp, err
 		}

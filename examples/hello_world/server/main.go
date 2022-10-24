@@ -58,14 +58,14 @@ func main() {
 	if memoization != nil && *memoization {
 		opts, err := care.NewDefaultOptions()
 		if err != nil {
-			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v", err)
+			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v\n", err)
 		}
 
 		opts.Methods.Add("/api.HelloWorldService/SayHello")
 
 		unary, err := care.NewServerUnaryInterceptor(opts)
 		if err != nil {
-			log.Fatalf("Failed to create server unary interceptor for the response memoization. Error: %v", err)
+			log.Fatalf("Failed to create server unary interceptor for the response memoization. Error: %v\n", err)
 		}
 
 		grpcsrv = grpc.NewServer(unary)

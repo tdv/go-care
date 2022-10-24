@@ -1,4 +1,4 @@
-all: make-dir gen-pb build-srv
+all: make-dir gen-pb build-srv build-cli
 	echo "Success!"
 
 make-dir:
@@ -15,3 +15,6 @@ gen-pb:
 
 build-srv:
 	go build -o ./out/server ./server/main.go
+
+build-cli:
+	go build -o ./out/client ./client/main.go
