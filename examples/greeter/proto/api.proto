@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-option go_package = "github.com/tdv/go-care/examples/hello_world/proto/api";
+option go_package = "github.com/tdv/go-care/examples/greeter/proto/api";
 
 package api;
 
-service HelloWorldService {
+service GreeterService {
   rpc SayHello (SayHelloRequest) returns (SayHelloResponse) {}
 }
 

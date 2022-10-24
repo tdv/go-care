@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	care "go-care"
-	api "go-care/examples/hello_world/proto/api/pb"
+	api "go-care/examples/greeter/proto/api/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/reflection"
@@ -16,7 +16,7 @@ import (
 )
 
 type server struct {
-	api.UnimplementedHelloWorldServiceServer
+	api.UnimplementedGreeterServiceServer
 }
 
 func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.SayHelloResponse, error) {
@@ -61,7 +61,7 @@ func main() {
 			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v\n", err)
 		}
 
-		opts.Methods.Add("/api.HelloWorldService/SayHello")
+		opts.Methods.Add("/api.GreeterService/SayHello")
 
 		unary, err := care.NewServerUnaryInterceptor(opts)
 		if err != nil {
@@ -74,7 +74,7 @@ func main() {
 	}
 
 	srv := server{}
-	api.RegisterHelloWorldServiceServer(grpcsrv, &srv)
+	api.RegisterGreeterServiceServer(grpcsrv, &srv)
 
 	if withReflection != nil && *withReflection {
 		reflection.Register(grpcsrv)

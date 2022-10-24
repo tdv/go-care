@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 	care "go-care"
-	api "go-care/examples/hello_world/proto/api/pb"
+	api "go-care/examples/greeter/proto/api/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log"
@@ -16,9 +16,9 @@ func main() {
 	var (
 		port        = flag.Int("port", 55555, "The server port.")
 		host        = flag.String("host", "localhost", "The server host.")
-		memoization = flag.Bool("memoization", true, "Use response memoization on the client side.")
+		memoization = flag.Bool("memoization", false, "Use response memoization on the client side.")
 		name        = flag.String("name", "Client", "The name for greeting.")
-		repeat      = flag.Uint("repeat", 2, "Number of the request repetitions.")
+		repeat      = flag.Uint("repeat", 1, "Number of the request repetitions.")
 		help        = flag.Bool("help", false, "Print usage instructions and exit.")
 	)
 
@@ -41,7 +41,7 @@ func main() {
 			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v\n", err)
 		}
 
-		opts.Methods.Add("/api.HelloWorldService/SayHello")
+		opts.Methods.Add("/api.GreeterService/SayHello")
 
 		unary, err := care.NewClientUnaryInterceptor(opts)
 		if err != nil {
@@ -61,7 +61,7 @@ func main() {
 
 	defer conn.Close()
 
-	client := api.NewHelloWorldServiceClient(conn)
+	client := api.NewGreeterServiceClient(conn)
 
 	ctx := context.Background()
 	//ctx, cancel := context.WithTimeout(ctx, time.Second*5)
