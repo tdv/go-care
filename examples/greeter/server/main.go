@@ -27,7 +27,7 @@ func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.S
 	}
 
 	resp := api.SayHelloResponse{
-		Greeting: "Hellol: " + req.Name,
+		Greeting: "Hello: " + req.Name,
 	}
 
 	return &resp, status.New(codes.OK, "Ok.").Err()
