@@ -8,34 +8,19 @@ import (
 	api "go-care/examples/hello_world/proto/api/pb"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/reflection"
 	"google.golang.org/grpc/status"
 	"log"
 	"net"
-	"strings"
+	"os"
 )
 
 type server struct {
 	api.UnimplementedHelloWorldServiceServer
 }
 
-func (s *server) SayHello(
-	ctx context.Context,
-	req *api.SayHelloRequest,
-) (
-	*api.SayHelloResponse,
-	error,
-) {
-	log.Println("Calling 'SayHallo' method.")
-	m, _ := metadata.FromIncomingContext(ctx)
-	for k, v := range m {
-		log.Printf("%s = %s\n", k, strings.Join(v, "; "))
-	}
-
-	if req == nil {
-		return nil, status.Errorf(codes.InvalidArgument, "An empty request.")
-	}
+func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.SayHelloResponse, error) {
+	log.Printf("Handling the request. 'SayHello' has been called for '%s'\n", req.Name)
 
 	if len(req.Name) == 0 {
 		return nil, status.Errorf(codes.InvalidArgument, "Empty name.")
@@ -50,12 +35,18 @@ func (s *server) SayHello(
 
 func main() {
 	var (
-		port        = flag.Int("port", 55555, "The server port.")
-		memoization = flag.Bool("memoizatoin", true, "Use response memoization.")
+		port           = flag.Int("port", 55555, "The server port.")
+		memoization    = flag.Bool("memoization", true, "Use response memoization.")
+		withReflection = flag.Bool("with-reflection", false, "Enable reflection for the service.")
+		help           = flag.Bool("help", false, "Print usage instructions and exit.")
 	)
 
 	flag.Parse()
-	flag.Usage()
+
+	if help != nil && *help {
+		flag.Usage()
+		os.Exit(0)
+	}
 
 	listener, err := net.Listen("tcp", fmt.Sprintf(":%d", *port))
 	if err != nil {
@@ -64,9 +55,7 @@ func main() {
 
 	var grpcsrv *grpc.Server
 
-	if !*memoization {
-		grpcsrv = grpc.NewServer()
-	} else {
+	if memoization != nil && *memoization {
 		opts, err := care.NewDefaultOptions()
 		if err != nil {
 			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v", err)
@@ -80,14 +69,27 @@ func main() {
 		}
 
 		grpcsrv = grpc.NewServer(unary)
+	} else {
+		grpcsrv = grpc.NewServer()
 	}
 
 	srv := server{}
 	api.RegisterHelloWorldServiceServer(grpcsrv, &srv)
 
-	reflection.Register(grpcsrv)
-
-	if err = grpcsrv.Serve(listener); err != nil {
-		log.Fatalf("Failed to run the server. Error: %v\n", err)
+	if withReflection != nil && *withReflection {
+		reflection.Register(grpcsrv)
 	}
+
+	quit := make(chan struct{})
+
+	go func() {
+		if err = grpcsrv.Serve(listener); err != nil {
+			log.Printf("Failed to run the server. Error: %v\n", err)
+		}
+		quit <- struct{}{}
+	}()
+
+	fmt.Printf("Started on the port %d. Press Ctrl+C to quit.\n", *port)
+
+	<-quit
 }

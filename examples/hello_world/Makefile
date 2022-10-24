@@ -2,7 +2,7 @@ all: make-dir gen-pb build-srv
 	echo "Success!"
 
 make-dir:
-	mkdir -p ./proto/api/pb \
+	mkdir -p ./proto/api/pb
 	mkdir -p ./out
 
 gen-pb:
