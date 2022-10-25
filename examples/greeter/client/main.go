@@ -80,6 +80,6 @@ func main() {
 			log.Fatalf("Failed to call 'SayHello' Error %v\n", err)
 		}
 
-		fmt.Printf("Response from the server is '%s'\n", resp.Greeting)
+		log.Printf("Response from the server is '%s'\n", resp.Greeting)
 	}
 }

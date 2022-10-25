@@ -10,7 +10,7 @@ The package aims to improve performance via caching response for respective requ
 
 Essential gist of the approach is to make an interceptor where compute the key --a hash of the incoming data-- and memorize/restore the responses making lower real computation cost at the expense of decreasing the number of the real computation in the server's handlers.  
 
-The package can be used with in-build LRU cache or with an external cache like Redis, Memcached or something else. In order to use an external cache there is only the need to implement a caching interface.
+The package can be used with built-in LRU cache or with an external cache like Redis, Memcached or something else. In order to use an external cache there is only the need to implement a caching interface.
 
 # Features
 - server- and client-side response memoization
@@ -115,4 +115,4 @@ More details you'll find in the [examples](https://github.com/tdv/go-care/tree/m
 The [examples](https://github.com/tdv/go-care/tree/main/examples/greeter) demonstrate the above features. Having run server and client with different param-set you can try the features.
 
 # Compiler and OS
-The package has developed and tested in Go 1.18 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
+The package has developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
