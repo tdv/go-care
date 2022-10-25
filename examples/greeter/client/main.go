@@ -64,8 +64,6 @@ func main() {
 	client := api.NewGreeterServiceClient(conn)
 
 	ctx := context.Background()
-	//ctx, cancel := context.WithTimeout(ctx, time.Second*5)
-	//defer cancel()
 
 	var count uint = 1
 	if repeat != nil {

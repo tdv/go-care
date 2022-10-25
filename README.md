@@ -19,8 +19,100 @@ The package can be used with in-build LRU cache or with an external cache like R
 - thread safety
 - easy to use :)
 
+# Usage
+1. Add the package to the project
+2. On the server-side it might look articulated like below in pseudocode
+```go
+package main
+
+import (
+  ...
+  care "github.com/tdv/go-care"
+  ...
+)
+
+// Your server implementation
+// type server struct {
+//   api.UnimplementedYourServerServiceServer
+// }
+
+// ...
+
+func main() {
+  // Other your code
+  ...
+
+  // Creating the options
+  opts, err := care.NewDefaultOptions()
+  if err != nil {
+    log.Fatalf...
+  }
+
+  // Adding methods for the memoization. 
+  // You need to define the methods pool 
+  // for response memoization.
+  opts.Methods.Add("/api.GreeterService/SayHello")
+
+  // Other customization might be done via the opts variable.
+  // See examples.
+
+  // Creating the server-side interceptor.
+  unary, err := care.NewServerUnaryInterceptor(opts)
+  if err != nil {
+    log.Fatalf...
+  }
+
+  // Providing / applying the interceptor
+  grpcsrv := grpc.NewServer(unary)
+  // Other your code
+
+  ...
+}
+```
+3. On the client-side the similar way
+ ```go
+package main
+
+import (
+  ...
+  care "github.com/tdv/go-care"
+  ...
+)
+
+func main() {
+  ...
+
+  opts, err := care.NewDefaultOptions()
+  if err != nil {
+    log.Fatalf...
+  }
+
+  opts.Methods.Add("/api.GreeterService/SayHello")
+
+  unary, err := care.NewClientUnaryInterceptor(opts)
+  if err != nil {
+    log.Fatalf...
+  }
+
+  conn, err := grpc.Dial(
+    fmt.Sprintf("%s:%d", *host, *port),
+    grpc.WithTransportCredentials(insecure.NewCredentials()),
+    unary,
+  )
+
+  if err != nil {
+    log.Fatalf...
+  }
+
+  defer conn.Close()
+
+	...
+}
+```
+More details you'll find in the [examples](https://github.com/tdv/go-care/tree/main/examples/greeter)
+ 
 # Examples
-The examples demonstrate the above features. Having run server and client with different param-set you can try the features.
+The [examples](https://github.com/tdv/go-care/tree/main/examples/greeter) demonstrate the above features. Having run server and client with different param-set you can try the features.
 
 # Compiler and OS
 The package has developed and tested in Go 1.18 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.

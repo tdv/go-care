@@ -13,6 +13,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"time"
 )
 
 type server struct {
@@ -29,6 +30,10 @@ func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.S
 	resp := api.SayHelloResponse{
 		Greeting: "Hello: " + req.Name,
 	}
+
+	// Adding something like  the long time computation in onder to
+	// try out the profit of the memoization usage,
+	time.Sleep(time.Second * 2)
 
 	return &resp, status.New(codes.OK, "Ok.").Err()
 }
