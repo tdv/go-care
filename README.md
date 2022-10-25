@@ -8,7 +8,7 @@ Having faced an issue of lack of the memoization in grpc this library has been w
 
 The package aims to improve performance via caching response for respective request params. Having included additional information from incoming data there is a possibility to make the most unique key for the cached response.  
 
-Essential gist of the approach is to make an interceptor where compute the key --a hash of the incoming data-- and memorize/restore the responses making lower real computation cost at the expense of decreasing the number of the real computation in the server's handlers.  
+Essential gist of the approach is to make an interceptor wherein compute the key --a hash of the incoming data-- and memorize/restore the responses, having been making the lower computation cost at the expense of the decreased number of the real computation.      
 
 The package can be used with built-in LRU cache or with an external cache like Redis, Memcached or something else. In order to use an external cache there is only the need to implement a caching interface.
 
