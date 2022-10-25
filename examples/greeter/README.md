@@ -1,9 +1,9 @@
 # Greeter
 The example demonstrates features quite close to the canonical 'Hello World' example.  
 
-Using different flag sets you can try different cases like with/without memoization on the client- or server-side or on the both.  
+Using various flag-set you can try various cases like with/without memoization on the client- or server-side or at the both.    
 
-In order to make an impression close to long time computation of the response into an easy method has added the delay (time.Sleep). Playing with flags you'll notice how everything works, compare and evaluate the results.  
+In order to make an impression close to long time response computation having added the fake delay (time.Sleep) on the server-side. Having been playing with flags you'll notice how everything works, compare and evaluate the results.  
 
 # Build
 ```bash
@@ -100,8 +100,8 @@ Run the client with the memoization
 2022/10/25 23:11:06 Response from the server is 'Hello: User'
 2022/10/25 23:11:06 Response from the server is 'Hello: User'
 ```
-In this case only the first request has reached the server, the others left on the client-side and obtained from the client's cache.  
-The is no delay among the responses, only the first had been waited too long (in ratio with others).
+In this case only the first request had reached the server, the others remained on the client-side and obtained from the client's cache.  
+There is no delay amongs the responses, only the first had been waited too long (in ratio with others).
 
 ### At the both sides
 ```bash
@@ -118,10 +118,10 @@ Started on the port 55555. Press Ctrl+C to quit.
 In this case  nothing interesting. Everything is predicted.
 
 # Note
-All cases have been considered with similar params. If we use different params, there will be the similar results like above, but different for each param-set because that the key for a response is the hash of the request (of all params)  
+All cases have been considered with similar params. If we use different params, there will be the similar results like above, but different for each param-set because a key of the response is the hash of the request (of all params)  
 
 ## In additional
-The server's key '-with-reflection' might be used for discovering all services and methods via grpc_cli at least like in the example below
+The server's key '-with-reflection' might be used for discovering all services and methods via grpc_cli at least like below
 ```bash
 …out$grpc_cli ls localhost:55555
 api.GreeterService
