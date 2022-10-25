@@ -112,7 +112,7 @@ func main() {
 More details you'll find among the [examples](https://github.com/tdv/go-care/tree/main/examples/greeter)
  
 # Examples
-The [examples](https://github.com/tdv/go-care/tree/main/examples/greeter) demonstrate features. Having run server and client with different param-set you can try the features.
+The [examples](https://github.com/tdv/go-care/tree/main/examples) demonstrate go-care package's features. Having run server and client with different param-set you can try the onec.
 
 # Compiler and OS
 The package had developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
