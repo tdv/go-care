@@ -10,7 +10,7 @@ The package aims to improve performance via caching response for respective requ
 
 Essential gist of the approach is to make an interceptor wherein compute the key --a hash of the incoming data-- and memorize/restore the responses, having been making the lower computation cost at the expense of the decreased number of the real computation.      
 
-The package can be used with built-in LRU cache or with an external cache like Redis, Memcached or something else. In order to use an external cache there is only the need to implement a caching interface.
+The package can be used with built-in LRU cache or with an external cache like Redis, Memcached, or something else. In order to use an external cache there is only the need to implement a caching interface.
 
 # Features
 - server- and client-side response memoization
@@ -21,7 +21,7 @@ The package can be used with built-in LRU cache or with an external cache like R
 
 # Usage
 1. Add the package to the project
-2. On the server-side it might look articulated like below in pseudocode
+2. On the server-side it might be articulated like below in pseudocode
 ```go
 package main
 
@@ -54,7 +54,7 @@ func main() {
   opts.Methods.Add("/api.GreeterService/SayHello")
 
   // Other customization might be done via the opts variable.
-  // See examples.
+  // See the examples.
 
   // Creating the server-side interceptor.
   unary, err := care.NewServerUnaryInterceptor(opts)
@@ -109,10 +109,10 @@ func main() {
 	...
 }
 ```
-More details you'll find in the [examples](https://github.com/tdv/go-care/tree/main/examples/greeter)
+More details you'll find among the [examples](https://github.com/tdv/go-care/tree/main/examples/greeter)
  
 # Examples
-The [examples](https://github.com/tdv/go-care/tree/main/examples/greeter) demonstrate the above features. Having run server and client with different param-set you can try the features.
+The [examples](https://github.com/tdv/go-care/tree/main/examples/greeter) demonstrate features. Having run server and client with different param-set you can try the features.
 
 # Compiler and OS
-The package has developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
+The package had developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
