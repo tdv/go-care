@@ -103,7 +103,7 @@ Run the client with the memoization
 In this case only the first request has reached the server, the others left on the client-side and obtained from the client's cache.  
 The is no delay among the responses, only the first had been waited too long (in ratio with others).
 
-### At both sides
+### At the both sides
 ```bash
 ./server -memoization=1
 Started on the port 55555. Press Ctrl+C to quit.
