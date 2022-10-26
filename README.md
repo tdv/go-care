@@ -19,6 +19,10 @@ The package can be used with built-in LRU cache or with an external cache like R
 - thread safety
 - easy to use :)
 
+**Note**
+The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
+
+
 # Usage
 1. Add the package to the project
 2. On the server-side it might be articulated like below in pseudocode
@@ -51,7 +55,7 @@ func main() {
   // Adding methods for the memoization. 
   // You need to define the methods pool 
   // for response memoization.
-  opts.Methods.Add("/api.GreeterService/SayHello")
+  opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
 
   // Other customization might be done via the opts variable.
   // See the examples.
@@ -87,7 +91,7 @@ func main() {
     log.Fatalf...
   }
 
-  opts.Methods.Add("/api.GreeterService/SayHello")
+  opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
 
   unary, err := care.NewClientUnaryInterceptor(opts)
   if err != nil {

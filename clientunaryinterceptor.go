@@ -33,7 +33,7 @@ func (this *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
 			},
 		)
 
-		if !realComputation {
+		if !realComputation && resp != nil {
 			replyVal := reflect.ValueOf(reply).Elem()
 			respVal := reflect.ValueOf(resp).Elem()
 			tmp := replyVal.Interface()

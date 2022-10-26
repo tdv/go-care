@@ -2,44 +2,34 @@ package care
 
 import (
 	"sync"
+	"time"
 )
 
 type Methods interface {
-	Exists(method string) bool
+	Cacheable(method string) (bool, time.Duration)
 
-	Add(method string) Methods
-	Set(methods ...string)
+	Add(method string, ttl time.Duration) Methods
 	Remove(method string)
 	Clean()
 }
 
 type methodsStorage struct {
 	mtx     sync.RWMutex
-	methods map[string]struct{}
+	methods map[string]time.Duration
 }
 
-func (this *methodsStorage) Exists(method string) bool {
+func (this *methodsStorage) Cacheable(method string) (bool, time.Duration) {
 	this.mtx.RLock()
 	defer this.mtx.RUnlock()
-	_, ok := this.methods[method]
-	return ok
+	ttl, ok := this.methods[method]
+	return ok, ttl
 }
 
-func (this *methodsStorage) Add(method string) Methods {
+func (this *methodsStorage) Add(method string, ttl time.Duration) Methods {
 	this.mtx.Lock()
 	this.mtx.Unlock()
-	this.methods[method] = struct{}{}
+	this.methods[method] = ttl
 	return this
-}
-
-func (this *methodsStorage) Set(methods ...string) {
-	newMap := make(map[string]struct{})
-	for _, method := range methods {
-		newMap[method] = struct{}{}
-	}
-	this.mtx.Lock()
-	this.mtx.Unlock()
-	this.methods = newMap
 }
 
 func (this *methodsStorage) Remove(method string) {
@@ -49,7 +39,7 @@ func (this *methodsStorage) Remove(method string) {
 }
 
 func (this *methodsStorage) Clean() {
-	newMap := make(map[string]struct{})
+	newMap := make(map[string]time.Duration)
 	this.mtx.Lock()
 	this.mtx.Unlock()
 	this.methods = newMap
@@ -57,6 +47,6 @@ func (this *methodsStorage) Clean() {
 
 func newMethodsStorage() Methods {
 	return &methodsStorage{
-		methods: make(map[string]struct{}),
+		methods: make(map[string]time.Duration),
 	}
 }

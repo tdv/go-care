@@ -5,9 +5,11 @@ import (
 	"encoding/json"
 	"errors"
 	"google.golang.org/grpc/metadata"
+	"log"
 	"reflect"
 	"sort"
 	"strings"
+	"time"
 )
 
 type interceptor struct {
@@ -87,13 +89,13 @@ func (this *interceptor) restoreResponse(typ reflect.Type, buf []byte) (resp int
 	return val, err
 }
 
-func (this *interceptor) cacheResponse(key string, val interface{}) error {
+func (this *interceptor) cacheResponse(key string, val interface{}, ttl time.Duration) error {
 	buf, err := json.Marshal(val)
 	if err != nil {
 		return err
 	}
 
-	return this.opts.Cache.Put(key, buf)
+	return this.opts.Cache.Put(key, buf, ttl)
 }
 
 func (this *interceptor) execute(
@@ -105,28 +107,40 @@ func (this *interceptor) execute(
 	interface{},
 	error,
 ) {
-	if this.opts.Switch.IsTurnedOn() && this.opts.Methods.Exists(method) {
-		key, err := this.makeKey(ctx, method, req)
-		if err == nil {
-			typ, hasType := this.types.Get(key)
-			if hasType {
-				buf, err := this.opts.Cache.Get(key)
-				if err == nil && len(buf) > 0 {
-					if resp, err := this.restoreResponse(typ, buf); err == nil {
-						return resp, nil
+	if this.opts.Switch.IsTurnedOn() {
+		if cacheable, ttl := this.opts.Methods.Cacheable(method); cacheable {
+			key, err := this.makeKey(ctx, method, req)
+			if err != nil {
+				log.Printf("Failed to make the key. Error: %v\n", err)
+			} else {
+				typ, hasType := this.types.Get(key)
+				if hasType {
+					buf, err := this.opts.Cache.Get(key)
+					if err == nil && len(buf) > 0 {
+						if resp, err := this.restoreResponse(typ, buf); err == nil {
+							return resp, nil
+						} else {
+							log.Printf("Failed to restore a response from the cache. Error: %v\n", err)
+						}
 					}
 				}
+
+				resp, err := handler(ctx, req)
+
+				if !hasType {
+					err = this.types.Put(key, resp)
+					if err != nil {
+						log.Printf("Failed to memorize the Type. Error: %v\n", err)
+					}
+				}
+
+				err = this.cacheResponse(key, resp, ttl)
+				if err != nil {
+					log.Printf("Failed to cache the response. Error: %v\n", err)
+				}
+
+				return resp, nil
 			}
-
-			resp, err := handler(ctx, req)
-
-			if !hasType {
-				this.types.Put(key, resp)
-			}
-
-			this.cacheResponse(key, resp)
-
-			return resp, err
 		}
 	}
 

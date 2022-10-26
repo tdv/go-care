@@ -66,7 +66,7 @@ func main() {
 			log.Fatalf("Failed to create the new default options for the response memoization. Error: %v\n", err)
 		}
 
-		opts.Methods.Add("/api.GreeterService/SayHello")
+		opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
 
 		unary, err := care.NewServerUnaryInterceptor(opts)
 		if err != nil {

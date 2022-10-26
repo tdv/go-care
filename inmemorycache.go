@@ -3,6 +3,7 @@ package care
 import (
 	"errors"
 	"sync"
+	"time"
 )
 
 type node struct {
@@ -16,6 +17,12 @@ type value struct {
 	val  []byte
 }
 
+// This built-in implementation of the in-memory cache
+// doesn't support eviction by the TTL. It has developed only
+// for demo and small MVP. In production you need to use
+// go-care with Redis, Memcached, or other cache.
+// That might be done by implementing the 'Cache' interface
+// and providing the one via 'Options'.
 type inMemoryCache struct {
 	mtx      sync.Mutex
 	cache    map[string]*value
@@ -42,7 +49,7 @@ func (this *inMemoryCache) itemOnTop(v *value) {
 	}
 }
 
-func (this *inMemoryCache) Put(key string, val []byte) error {
+func (this *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error {
 	if this.capacity < 1 {
 		return errors.New("There is no possibility for an insertion. The capacity is 0.")
 	}
