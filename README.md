@@ -103,6 +103,8 @@ More details you'll find among the [examples](https://github.com/tdv/go-care/tre
  
 # Examples
 The [examples](https://github.com/tdv/go-care/tree/main/examples) demonstrate go-care package's features. Having run server and client with different param-set you can try the ones.
+- ['Greeter'](https://github.com/tdv/go-care/tree/main/examples/greeter) is close to being an canonical 'Hello World' example, having demonstrated all basic features.    
+- ['Redis Greeter'](https://github.com/tdv/go-care/tree/main/examples/redis_greeter) is the same, but with Redis like an external cache is.   
 
 # Compiler and OS
 The package had developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
