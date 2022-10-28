@@ -131,4 +131,4 @@ grpc.reflection.v1alpha.ServerReflection
 SayHello
 ```
 
-*Good luck discovering the features of the go-care package.*
+**Good luck discovering the features of the go-care package.**

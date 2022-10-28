@@ -13,6 +13,7 @@ import (
 	"net"
 	"os"
 	"proto/api/pb"
+	"rediscache"
 	"time"
 )
 
@@ -44,6 +45,9 @@ func main() {
 		memoization    = flag.Bool("memoization", true, "Use response memoization.")
 		withReflection = flag.Bool("with-reflection", false, "Enable reflection for the service.")
 		help           = flag.Bool("help", false, "Print usage instructions and exit.")
+		redishost      = flag.String("redishost", "localhost", "The Redis server host.")
+		redisport      = flag.Int("redisport", 6379, "The Redis server port.")
+		redisdb        = flag.Int("redisdb", 0, "The Redis DB id.")
 	)
 
 	flag.Parse()
@@ -61,8 +65,25 @@ func main() {
 	var grpcsrv *grpc.Server
 
 	if memoization != nil && *memoization {
+		ctx := context.Background()
+		ctx, cancel := context.WithCancel(ctx)
+		defer cancel()
+
+		cache, err := rediscache.New(
+			ctx,
+			time.Millisecond*500,
+			*redishost,
+			*redisport,
+			*redisdb,
+		)
+
+		if err != nil {
+			log.Fatalf("Failed to create Redis cache instance. Error: %v\n", err)
+		}
+
 		opts := care.NewOptions()
 		opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
+		opts.Cache = cache
 		unary := care.NewServerUnaryInterceptor(opts)
 		grpcsrv = grpc.NewServer(unary)
 	} else {

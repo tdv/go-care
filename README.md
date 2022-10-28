@@ -31,7 +31,7 @@ package main
 
 import (
   ...
-  care "github.com/tdv/go-care"
+  "github.com/tdv/go-care"
   ...
 )
 
@@ -47,10 +47,7 @@ func main() {
   ...
 
   // Creating the options
-  opts, err := care.NewDefaultOptions()
-  if err != nil {
-    log.Fatalf...
-  }
+  opts := care.NewOptions()
 
   // Adding methods for the memoization. 
   // You need to define the methods pool 
@@ -61,11 +58,7 @@ func main() {
   // See the examples.
 
   // Creating the server-side interceptor.
-  unary, err := care.NewServerUnaryInterceptor(opts)
-  if err != nil {
-    log.Fatalf...
-  }
-
+  unary := care.NewServerUnaryInterceptor(opts)
   // Providing / applying the interceptor
   grpcsrv := grpc.NewServer(unary)
   // Other your code
@@ -79,24 +72,17 @@ package main
 
 import (
   ...
-  care "github.com/tdv/go-care"
+  "github.com/tdv/go-care"
   ...
 )
 
 func main() {
   ...
 
-  opts, err := care.NewDefaultOptions()
-  if err != nil {
-    log.Fatalf...
-  }
-
+  opts := care.NewDefaultOptions()
   opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
 
-  unary, err := care.NewClientUnaryInterceptor(opts)
-  if err != nil {
-    log.Fatalf...
-  }
+  unary := care.NewClientUnaryInterceptor(opts)
 
   conn, err := grpc.Dial(
     fmt.Sprintf("%s:%d", *host, *port),

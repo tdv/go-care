@@ -8,7 +8,7 @@ type Options struct {
 	Cache      Cache
 }
 
-func NewDefaultOptions() (*Options, error) {
+func NewOptions() *Options {
 	opts := Options{
 		Switch:     newSwitch(),
 		Methods:    newMethodsStorage(),
@@ -17,5 +17,5 @@ func NewDefaultOptions() (*Options, error) {
 		Cache:      NewInMemoryCache(1024),
 	}
 
-	return &opts, nil
+	return &opts
 }

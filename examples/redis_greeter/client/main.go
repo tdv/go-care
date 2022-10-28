@@ -10,6 +10,7 @@ import (
 	"log"
 	"os"
 	api "proto/api/pb"
+	"rediscache"
 	"time"
 )
 
@@ -21,6 +22,9 @@ func main() {
 		name        = flag.String("name", "Client", "The name for greeting.")
 		repeat      = flag.Uint("repeat", 1, "Number of the request repetitions.")
 		help        = flag.Bool("help", false, "Print usage instructions and exit.")
+		redishost   = flag.String("redishost", "localhost", "The Redis server host.")
+		redisport   = flag.Int("redisport", 6379, "The Redis server port.")
+		redisdb     = flag.Int("redisdb", 0, "The Redis DB id.")
 	)
 
 	flag.Parse()
@@ -36,9 +40,26 @@ func main() {
 		grpc.WithTransportCredentials(insecure.NewCredentials()),
 	)
 
+	ctx := context.Background()
+	ctx, cancel := context.WithCancel(ctx)
+	defer cancel()
+
 	if memoization != nil && *memoization {
+		cache, err := rediscache.New(
+			ctx,
+			time.Millisecond*500,
+			*redishost,
+			*redisport,
+			*redisdb,
+		)
+
+		if err != nil {
+			log.Fatalf("Failed to create Redis cache instance. Error: %v\n", err)
+		}
+
 		opts := care.NewOptions()
 		opts.Methods.Add("/api.GreeterService/SayHello", time.Second*60)
+		opts.Cache = cache
 
 		unary := care.NewClientUnaryInterceptor(opts)
 		grpcopts = append(grpcopts, unary)
@@ -55,8 +76,6 @@ func main() {
 	defer conn.Close()
 
 	client := api.NewGreeterServiceClient(conn)
-
-	ctx := context.Background()
 
 	var count uint = 1
 	if repeat != nil {
