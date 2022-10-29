@@ -1,3 +1,5 @@
+![build workflow](https://github.com/tdv/go-care/actions/workflows/go.yml/badge.svg)
+
 # go-care
 A library for gRPC response memoization in Go, aimed to improve common performance of a project having made real response computation lower cost.  
 
