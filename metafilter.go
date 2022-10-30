@@ -4,11 +4,28 @@
 
 package care
 
+// Header's pools for filtering.
 type Headers struct {
-	Allowed    []string
+	// Headers for the key computation.
+	Allowed []string
+	// Omitted headers from the key computation.
 	Disallowed []string
 }
+
+// A 'MetaFilter' represents an interface for filtering the headers
+// before including the once in the key computation.
+//
+// It can be useful if you need to pick up only a few header
+// which have to be included in to the key, making the one
+// more unique and filter the noise. For instance, request-id,
+// trace-id, etc are the noise meanwhile jwt-token (and others
+// according your app logic) is an important header.
+//
+// Having implemented your own version, you can control the headers
+// which will be involved in the key computation process.
 type MetaFilter interface {
+	// Returns true allowing to include the header in
+	// the key computation, otherwise returns false.
 	Allowed(key string, val []string) bool
 }
 

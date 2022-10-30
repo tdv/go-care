@@ -123,6 +123,8 @@ func (this *inMemoryCache) Get(key string) ([]byte, error) {
 	return nil, nil
 }
 
+// Makes a built-in LRU in-memory cache implementation
+// aimed for small projects, MVP, etc.
 func NewInMemoryCache(capacity uint) Cache {
 	return &inMemoryCache{
 		capacity: capacity,

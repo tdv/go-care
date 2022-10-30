@@ -33,6 +33,8 @@ func (this *unaryServerInterceptor) Unary() grpc.UnaryServerInterceptor {
 	}
 }
 
+// Makes a new unary server interceptor.
+// There will be panic if options is an empty pointer.
 func NewServerUnaryInterceptor(opts *Options) grpc.ServerOption {
 	if opts == nil {
 		panic("The options must not be provided as a nil-pointer.")

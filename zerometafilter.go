@@ -11,6 +11,8 @@ func (*zeroMetaFilter) Allowed(string, []string) bool {
 	return true
 }
 
+// Makes a zero-filter implementation. It can be used
+// if you don't have any rule for header filtering.
 func NewZeroMetaFilter() MetaFilter {
 	return &zeroMetaFilter{}
 }

@@ -49,6 +49,8 @@ func (this *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
 	}
 }
 
+// Makes a new unary client interceptor.
+// There will be panic if options is an empty pointer.
 func NewClientUnaryInterceptor(opts *Options) grpc.DialOption {
 	if opts == nil {
 		panic("The options must not be provided as a nil-pointer.")
