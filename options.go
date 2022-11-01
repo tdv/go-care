@@ -26,7 +26,7 @@ func NewOptions() *Options {
 	opts := Options{
 		Switch:     newSwitch(),
 		Methods:    newMethodsStorage(),
-		MetaFilter: NewZeroMetaFilter(),
+		MetaFilter: NewZeroMetaFilter(true),
 		Hash:       newDefaultHash(),
 		Cache:      NewInMemoryCache(1024),
 	}

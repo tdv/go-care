@@ -5,14 +5,22 @@
 package care
 
 type zeroMetaFilter struct {
+	allowed bool
 }
 
-func (*zeroMetaFilter) Allowed(string, []string) bool {
-	return true
+func (this *zeroMetaFilter) Allowed(string, []string) bool {
+	return this.allowed
 }
 
 // Makes a zero-filter implementation. It can be used
 // if you don't have any rule for header filtering.
-func NewZeroMetaFilter() MetaFilter {
-	return &zeroMetaFilter{}
+//
+// allowed - defines common behaviour for any header
+//
+//	true - allows all header to be included in the key computation.
+//	false - disallows all header to be included in the key computation.
+func NewZeroMetaFilter(allowed bool) MetaFilter {
+	return &zeroMetaFilter{
+		allowed: allowed,
+	}
 }
