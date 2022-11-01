@@ -22,8 +22,7 @@ The package can be used with built-in LRU cache or with an external cache like R
 - easy to use :)
 
 **Note**
-- The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
-- Currently, if a request contains sequences --like slices, arrays, maps, etc-- the response caching might be sensitive for the items’ order inside the sequences and if the orders are not the same for the same requests, some requests will reach the handlers, omitting the cache. It will be fixed in a little while.  
+The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
 
 # Usage
 1. Add the package to the project

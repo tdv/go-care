@@ -50,26 +50,16 @@ func (this *interceptor) makeKey(
 	method string,
 	req interface{},
 ) (string, error) {
-	typ := reflect.TypeOf(req)
-	if typ == nil {
-		return "", errors.New("An empty request.")
-	}
-
-	buf, err := json.Marshal(req)
-	if err != nil {
-		return "", err
-	}
-
 	key := strings.Builder{}
 
 	// Add method name
 	key.WriteString(method)
-	// A bit salt has been added in order to get more unique key.
-	key.WriteString(typ.String())
 	// Add meta
 	this.processMeta(ctx, &key)
 	// Add serialized request
-	key.Write(buf)
+	if err := robustHashingData(req, &key); err != nil {
+		return "", err
+	}
 
 	hash, err := this.opts.Hash.Calc(key.String())
 	if err != nil {

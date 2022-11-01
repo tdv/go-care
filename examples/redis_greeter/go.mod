@@ -3,13 +3,13 @@ module redis_greeter
 go 1.19
 
 require (
-	github.com/tdv/go-care v1.0.3
+	github.com/tdv/go-care v1.1.0
 	google.golang.org/grpc v1.50.1
 	proto v0.0.0
 	rediscache v0.0.0
 )
 
-replace github.com/tdv/go-care v1.0.3 => ../..
+replace github.com/tdv/go-care v1.1.0 => ../..
 
 replace proto v0.0.0 => ./proto
 
