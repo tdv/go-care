@@ -19,10 +19,12 @@ The package can be used with built-in LRU cache or with an external cache like R
 - flexibility and room space for customization
 - loosely coupled architecture
 - thread safety
+- robust hash/key (any order of the same request data won't affect the hash/key)
 - easy to use :)
 
 **Note**
-The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
+- ‘Robus key’ means that if a request contains a sequence --like array, slice, map-- the key will not be affected by the items' order within the sequence. All requests with the same data in spite of any their order will be cached with the same response and there will be only one response computation for the first request.
+- The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
 
 # Usage
 1. Add the package to the project
