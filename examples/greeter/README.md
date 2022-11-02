@@ -49,7 +49,7 @@ Now you're familiar with the options. Let's go to try
 
 ## Let's try out
 ### With the server-side memoization
-Run the server with the memoization     
+Run the server with the memoization feature  
 ```bash
 ./server -memoization=1
 Started on the port 55555. Press Ctrl+C to quit.
@@ -63,12 +63,12 @@ Run the client without the memoization and with the request repetition for three
 2022/10/25 22:44:32 Response from the server is 'Hello: User'
 ```
 Look at the output.
-- On the server-side the real handler has been called once in spite of on the client-side three requests have been sent.
+- On the server-side the real handler called once in spite of on the client-side three requests had been sent.
 - All requests reached the server, but only one handled really, the others obtained from the cache and the handler didn't call.
 - Notice that on the client-side the time difference among the responses is not significant. But you could notice that the very first request had been processing longer than the others processed. We had added fake long computation within a handler via the delay (time.Sleep) and that worked for the first request.
 
 ### With the client-side memoization
-Run the server without the memoization
+Run the server without the memoization feature  
 ```bash
 ./server -memoization=0
 Started on the port 55555. Press Ctrl+C to quit.
@@ -120,7 +120,7 @@ In this case  nothing interesting. Everything is predicted.
 # Note
 All cases have been considered with similar params. If we use different params, there will be the similar results like above, but different for each param-set because a key of the response is the hash of the request (of all params)  
 
-## In additional
+## In addition
 The server's key '-with-reflection' might be used for discovering all services and methods via grpc_cli at least like below
 ```bash
 …out$grpc_cli ls localhost:55555

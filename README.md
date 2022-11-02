@@ -1,7 +1,7 @@
 [![build workflow](https://github.com/tdv/go-care/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/tdv/go-care/actions)
 
 # go-care
-A library for gRPC response memoization in Go, aimed to improve common performance of a project having made real response computation lower cost.  
+A library for gRPC response memoization in Go aims to improve common performance of any project having made real response computation lower cost.  
 
 go-care is an abbreviation of the 'Cached Response in Go'.  
 
@@ -10,7 +10,7 @@ Having faced an issue of lack of the memoization in grpc this library has been w
 
 The package aims to improve performance via caching response for respective request params. Having included additional information from incoming data there is a possibility to make the most unique key for the cached response.  
 
-Essential gist of the approach is to make an interceptor wherein compute the key --a hash of the incoming data-- and memorize/restore the responses, having been making the lower computation cost at the expense of the decreased number of the real computation.      
+Essential gist of the approach is to make an interceptor wherein compute a key --a hash of the incoming data-- and memorize/restore a respective response, having been making the lower computation cost at the expense of the decreased number of the real computation.      
 
 The package can be used with built-in LRU cache or with an external cache like Redis, Memcached, or something else. In order to use an external cache there is only the need to implement a caching interface.
 
@@ -24,11 +24,11 @@ The package can be used with built-in LRU cache or with an external cache like R
 
 **Note**
 - ‘Robus key’ means that if a request contains a sequence --like array, slice, map-- the key will not be affected by the items' order within the sequence. All requests with the same data in spite of any their order will be cached with the same response and there will be only one response computation for the first request.
-- The built-in implementation of the in-memory cache doesn't support eviction by the TTL. It has developed only for demo and small MVP. In production you need to use go-care with Redis, Memcached, or other cache. That might be done by implementing the 'Cache' interface and providing the one via 'Options'.
+- Built-in in-memory cache implementation doesn't support an eviction policy by TTL. It has developed only for demo and small MVP. In production you could use go-care with Redis, Memcached, or other cache. That might be done having implemented the 'Cache' interface and provided via 'Options'.
 
 # Usage
 1. Add the package to the project
-2. On the server-side it might be articulated like below in pseudocode
+2. On the server-side it might be articulated like below (in pseudocode)
 ```go
 package main
 
@@ -102,12 +102,12 @@ func main() {
 	...
 }
 ```
-More details you'll find among the [examples](https://github.com/tdv/go-care/tree/main/examples/greeter)
+More details you'll find among the [examples](https://github.com/tdv/go-care/tree/main/examples)
  
 # Examples
-The [examples](https://github.com/tdv/go-care/tree/main/examples) demonstrate go-care package's features. Having run server and client with different param-set you can try the ones.
+The [examples](https://github.com/tdv/go-care/tree/main/examples) demonstrate go-care package's features. Having run server and client with different param-set you can try out all features.
 - ['Greeter'](https://github.com/tdv/go-care/tree/main/examples/greeter) is close to the canonical 'Hello World' example, demonstrating all basic features.    
 - ['Redis Greeter'](https://github.com/tdv/go-care/tree/main/examples/redis_greeter) is the same, but with Redis like an external cache is.   
 
 # Compiler and OS
-The package had developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.
+The package has been developed and tested in Go 1.19 within Ubuntu 20.04. Hopefully, many other OS and compiler versions will be appropriate quite well.  
