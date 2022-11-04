@@ -6,6 +6,7 @@ package care
 
 import (
 	"errors"
+	"fmt"
 	"reflect"
 	"sync"
 )
@@ -33,8 +34,8 @@ func (this *typeStorageImpl) Put(key string, val interface{}) (err error) {
 	}
 
 	defer func() {
-		if recover() != nil {
-			err = errors.New("The value is not an interface.")
+		if r := recover(); r != nil {
+			err = errors.New(fmt.Sprint("The value is not an interface. ", r))
 		}
 	}()
 
