@@ -23,7 +23,7 @@ type value struct {
 
 // This built-in implementation of the in-memory cache
 // doesn't support eviction by the TTL. It has developed only
-// for demo and small MVP. In production you need to use
+// for demo and small MVP. In production, you need to use
 // go-care with Redis, Memcached, or other cache.
 // That might be done by implementing the 'Cache' interface
 // and providing the one via 'Options'.

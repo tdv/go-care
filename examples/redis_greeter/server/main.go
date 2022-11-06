@@ -36,7 +36,7 @@ func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.S
 		Greeting: "Hello: " + req.Name,
 	}
 
-	// Adding something like  the long time computation in onder to
+	// Adding something like  the long time computation in order to
 	// try out the profit of the memoization usage,
 	time.Sleep(time.Second * 2)
 

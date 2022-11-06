@@ -7,8 +7,7 @@ package care
 import "time"
 
 // A 'Cache' represents a common interface for responses caching.
-// It can be implemented for many different caches like
-// Redis, Memcached, etc,
+// It can be implemented for many caches like Redis, Memcached, etc,
 type Cache interface {
 	// Put data into the cache by key.
 	Put(key string, val []byte, ttl time.Duration) error

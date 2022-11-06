@@ -18,7 +18,7 @@ type Headers struct {
 // It can be useful if you need to pick up only a few header
 // which have to be included in to the key, making the one
 // more unique and filter the noise. For instance, request-id,
-// trace-id, etc are the noise meanwhile jwt-token (and others
+// trace-id, etc are the noise, meanwhile jwt-token (and others
 // according your app logic) is an important header.
 //
 // Having implemented your own version, you can control the headers
