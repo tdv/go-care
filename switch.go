@@ -23,16 +23,16 @@ type switchImpl struct {
 	isTurnedOn atomic.Bool
 }
 
-func (this *switchImpl) TurnOn() {
-	this.isTurnedOn.Store(true)
+func (s *switchImpl) TurnOn() {
+	s.isTurnedOn.Store(true)
 }
 
-func (this *switchImpl) TurnOff() {
-	this.isTurnedOn.Store(false)
+func (s *switchImpl) TurnOff() {
+	s.isTurnedOn.Store(false)
 }
 
-func (this *switchImpl) IsTurnedOn() bool {
-	return this.isTurnedOn.Load()
+func (s *switchImpl) IsTurnedOn() bool {
+	return s.isTurnedOn.Load()
 }
 
 func newSwitch() Switch {

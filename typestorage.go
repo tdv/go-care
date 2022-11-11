@@ -21,7 +21,7 @@ type typeStorageImpl struct {
 	types map[string]reflect.Type
 }
 
-func (this *typeStorageImpl) Put(key string, val interface{}) (err error) {
+func (s *typeStorageImpl) Put(key string, val interface{}) (err error) {
 	if len(key) == 0 {
 		err = errors.New("Key must not be empty.")
 		return
@@ -41,18 +41,18 @@ func (this *typeStorageImpl) Put(key string, val interface{}) (err error) {
 
 	elem := typ.Elem()
 
-	this.mtx.Lock()
-	defer this.mtx.Unlock()
-	this.types[key] = elem
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
+	s.types[key] = elem
 
 	return
 }
 
-func (this *typeStorageImpl) Get(key string) (reflect.Type, bool) {
-	this.mtx.RLock()
-	defer this.mtx.RUnlock()
+func (s *typeStorageImpl) Get(key string) (reflect.Type, bool) {
+	s.mtx.RLock()
+	defer s.mtx.RUnlock()
 
-	typ, ok := this.types[key]
+	typ, ok := s.types[key]
 
 	return typ, ok
 }

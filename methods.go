@@ -33,31 +33,31 @@ type methodsStorage struct {
 	methods map[string]time.Duration
 }
 
-func (this *methodsStorage) Cacheable(method string) (bool, time.Duration) {
-	this.mtx.RLock()
-	defer this.mtx.RUnlock()
-	ttl, ok := this.methods[method]
+func (s *methodsStorage) Cacheable(method string) (bool, time.Duration) {
+	s.mtx.RLock()
+	defer s.mtx.RUnlock()
+	ttl, ok := s.methods[method]
 	return ok, ttl
 }
 
-func (this *methodsStorage) Add(method string, ttl time.Duration) Methods {
-	this.mtx.Lock()
-	this.mtx.Unlock()
-	this.methods[method] = ttl
-	return this
+func (s *methodsStorage) Add(method string, ttl time.Duration) Methods {
+	s.mtx.Lock()
+	s.mtx.Unlock()
+	s.methods[method] = ttl
+	return s
 }
 
-func (this *methodsStorage) Remove(method string) {
-	this.mtx.Lock()
-	this.mtx.Unlock()
-	delete(this.methods, method)
+func (s *methodsStorage) Remove(method string) {
+	s.mtx.Lock()
+	s.mtx.Unlock()
+	delete(s.methods, method)
 }
 
-func (this *methodsStorage) Clean() {
+func (s *methodsStorage) Clean() {
 	newMap := make(map[string]time.Duration)
-	this.mtx.Lock()
-	this.mtx.Unlock()
-	this.methods = newMap
+	s.mtx.Lock()
+	s.mtx.Unlock()
+	s.methods = newMap
 }
 
 func newMethodsStorage() Methods {

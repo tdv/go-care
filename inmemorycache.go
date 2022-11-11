@@ -37,24 +37,24 @@ type inMemoryCache struct {
 	last  *node
 }
 
-func (this *inMemoryCache) itemOnTop(v *value) {
-	if v.item != this.last {
-		if v.item == this.first {
-			this.first = this.first.next
+func (s *inMemoryCache) itemOnTop(v *value) {
+	if v.item != s.last {
+		if v.item == s.first {
+			s.first = s.first.next
 		} else {
 			v.item.prev.next = v.item.next
 			v.item.next.prev = v.item.prev
 		}
 
 		v.item.next = nil
-		v.item.prev = this.last
-		this.last.next = v.item
-		this.last = v.item
+		v.item.prev = s.last
+		s.last.next = v.item
+		s.last = v.item
 	}
 }
 
-func (this *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error {
-	if this.capacity < 1 {
+func (s *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error {
+	if s.capacity < 1 {
 		return errors.New("There is no possibility for an insertion. The capacity is 0.")
 	}
 
@@ -62,16 +62,16 @@ func (this *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error 
 		return errors.New("You can't use an empty string like a key.")
 	}
 
-	this.mtx.Lock()
-	defer this.mtx.Unlock()
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
 
-	if v, ok := this.cache[key]; ok {
+	if v, ok := s.cache[key]; ok {
 		v.val = val
-		this.itemOnTop(v)
+		s.itemOnTop(v)
 	} else {
 		item := &node{
 			key:  key,
-			prev: this.last,
+			prev: s.last,
 			next: nil,
 		}
 
@@ -80,42 +80,42 @@ func (this *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error 
 			item: item,
 		}
 
-		if this.first == nil {
-			this.first = item
-			this.last = item
+		if s.first == nil {
+			s.first = item
+			s.last = item
 		}
 
-		if this.size < this.capacity {
-			this.size++
+		if s.size < s.capacity {
+			s.size++
 		} else {
-			delete(this.cache, this.first.key)
+			delete(s.cache, s.first.key)
 
-			this.first = this.first.next
-			if this.first != nil {
-				this.first.prev = nil
+			s.first = s.first.next
+			if s.first != nil {
+				s.first.prev = nil
 			} else {
-				this.first = item
-				this.last = item
+				s.first = item
+				s.last = item
 			}
 
 		}
 
-		if this.last != item {
-			this.last.next = item
-			this.last = item
+		if s.last != item {
+			s.last.next = item
+			s.last = item
 		}
-		this.cache[key] = v
+		s.cache[key] = v
 	}
 
 	return nil
 }
 
-func (this *inMemoryCache) Get(key string) ([]byte, error) {
-	this.mtx.Lock()
-	defer this.mtx.Unlock()
+func (s *inMemoryCache) Get(key string) ([]byte, error) {
+	s.mtx.Lock()
+	defer s.mtx.Unlock()
 
-	if v, ok := this.cache[key]; ok {
-		this.itemOnTop(v)
+	if v, ok := s.cache[key]; ok {
+		s.itemOnTop(v)
 
 		return v.val, nil
 	}

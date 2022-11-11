@@ -34,12 +34,12 @@ type metaFilter struct {
 	disallowedHeaders map[string]struct{}
 }
 
-func (this *metaFilter) Allowed(key string, val []string) bool {
-	if _, ok := this.disallowedHeaders[key]; ok {
+func (s *metaFilter) Allowed(key string, val []string) bool {
+	if _, ok := s.disallowedHeaders[key]; ok {
 		return false
 	}
 
-	_, ok := this.allowedHeaders[key]
+	_, ok := s.allowedHeaders[key]
 	return ok
 }
 

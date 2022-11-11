@@ -8,8 +8,8 @@ type zeroMetaFilter struct {
 	allowed bool
 }
 
-func (this *zeroMetaFilter) Allowed(string, []string) bool {
-	return this.allowed
+func (s *zeroMetaFilter) Allowed(string, []string) bool {
+	return s.allowed
 }
 
 // Makes a zero-filter implementation. It can be used

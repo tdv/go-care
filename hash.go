@@ -24,7 +24,7 @@ type defaultHash struct {
 	crc32Table *crc32.Table
 }
 
-func (this *defaultHash) Calc(key string) (string, error) {
+func (s *defaultHash) Calc(key string) (string, error) {
 	keyLen := len(key)
 
 	if keyLen < 1 {
@@ -40,7 +40,7 @@ func (this *defaultHash) Calc(key string) (string, error) {
 	}
 
 	data := []byte(key)
-	crc32Hash := crc32.Checksum(data, this.crc32Table)
+	crc32Hash := crc32.Checksum(data, s.crc32Table)
 	sha256Hash := sha256.Sum256(data)
 	hash := fmt.Sprintf("%08x%s%x",
 		crc32Hash,

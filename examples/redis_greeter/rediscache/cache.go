@@ -19,19 +19,19 @@ type redisCache struct {
 	timeout time.Duration
 }
 
-func (this *redisCache) Put(key string, val []byte, ttl time.Duration) error {
-	ctx, cancel := context.WithTimeout(this.ctx, this.timeout)
+func (s *redisCache) Put(key string, val []byte, ttl time.Duration) error {
+	ctx, cancel := context.WithTimeout(s.ctx, s.timeout)
 	defer cancel()
-	return this.client.Set(ctx, key, val, ttl).Err()
+	return s.client.Set(ctx, key, val, ttl).Err()
 }
 
-func (this *redisCache) Get(key string) ([]byte, error) {
-	ctx, cancel := context.WithTimeout(this.ctx, this.timeout)
+func (s *redisCache) Get(key string) ([]byte, error) {
+	ctx, cancel := context.WithTimeout(s.ctx, s.timeout)
 	defer cancel()
-	return this.client.Get(ctx, key).Bytes()
+	return s.client.Get(ctx, key).Bytes()
 }
 
-func (this *redisCache) init(
+func (s *redisCache) init(
 	ctx context.Context, timeout time.Duration,
 	host string, port int, db int) error {
 	client := redis.NewClient(&redis.Options{
@@ -53,9 +53,9 @@ func (this *redisCache) init(
 	if client == nil {
 		return errors.New("Failed to create Redis client.")
 	}
-	this.client = client
-	this.ctx = ctx
-	this.timeout = timeout
+	s.client = client
+	s.ctx = ctx
+	s.timeout = timeout
 	return nil
 }
 

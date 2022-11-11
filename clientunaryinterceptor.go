@@ -14,7 +14,7 @@ type unaryClientInterceptor struct {
 	interceptor *interceptor
 }
 
-func (this *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
+func (s *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
 	return func(
 		ctx context.Context,
 		method string,
@@ -25,7 +25,7 @@ func (this *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
 
 		realComputation := false
 
-		resp, err := this.interceptor.execute(
+		resp, err := s.interceptor.execute(
 			ctx,
 			method,
 			req,

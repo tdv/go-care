@@ -13,7 +13,7 @@ type unaryServerInterceptor struct {
 	interceptor *interceptor
 }
 
-func (this *unaryServerInterceptor) Unary() grpc.UnaryServerInterceptor {
+func (s *unaryServerInterceptor) Unary() grpc.UnaryServerInterceptor {
 	return func(
 		ctx context.Context,
 		req interface{},
@@ -22,7 +22,7 @@ func (this *unaryServerInterceptor) Unary() grpc.UnaryServerInterceptor {
 		interface{},
 		error) {
 
-		return this.interceptor.execute(
+		return s.interceptor.execute(
 			ctx,
 			info.FullMethod,
 			req,
