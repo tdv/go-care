@@ -53,7 +53,7 @@ func (s *inMemoryCache) itemOnTop(v *value) {
 	}
 }
 
-func (s *inMemoryCache) Put(key string, val []byte, ttl time.Duration) error {
+func (s *inMemoryCache) Put(key string, val []byte, _ time.Duration) error {
 	if s.capacity < 1 {
 		return errors.New("There is no possibility for an insertion. The capacity is 0.")
 	}

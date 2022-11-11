@@ -25,7 +25,7 @@ type server struct {
 	api.UnimplementedGreeterServiceServer
 }
 
-func (s *server) SayHello(ctx context.Context, req *api.SayHelloRequest) (*api.SayHelloResponse, error) {
+func (s *server) SayHello(_ context.Context, req *api.SayHelloRequest) (*api.SayHelloResponse, error) {
 	log.Printf("Handling the request. 'SayHello' has been called for '%s'\n", req.Name)
 
 	if len(req.Name) == 0 {

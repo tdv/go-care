@@ -34,7 +34,7 @@ type metaFilter struct {
 	disallowedHeaders map[string]struct{}
 }
 
-func (s *metaFilter) Allowed(key string, val []string) bool {
+func (s *metaFilter) Allowed(key string, _ []string) bool {
 	if _, ok := s.disallowedHeaders[key]; ok {
 		return false
 	}
@@ -43,6 +43,7 @@ func (s *metaFilter) Allowed(key string, val []string) bool {
 	return ok
 }
 
+//goland:noinspection ALL
 func NewMetaFilter(headers Headers) MetaFilter {
 	inst := metaFilter{
 		allowedHeaders:    make(map[string]struct{}),

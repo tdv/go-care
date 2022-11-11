@@ -77,7 +77,9 @@ func main() {
 		log.Fatalf("Failed to dial the server. Error: %v\n", err)
 	}
 
-	defer conn.Close()
+	defer func(conn *grpc.ClientConn) {
+		_ = conn.Close()
+	}(conn)
 
 	client := api.NewGreeterServiceClient(conn)
 
