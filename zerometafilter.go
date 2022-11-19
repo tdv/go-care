@@ -12,7 +12,7 @@ func (s *zeroMetaFilter) Allowed(string, []string) bool {
 	return s.allowed
 }
 
-// Makes a zero-filter implementation. It can be used
+// NewZeroMetaFilter - makes a zero-filter implementation. It can be used
 // if you don't have any rule for header filtering.
 //
 // allowed - defines common behaviour for any header

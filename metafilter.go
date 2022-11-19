@@ -4,7 +4,7 @@
 
 package care
 
-// Header's pools for filtering.
+// Headers is a pool for filtering.
 type Headers struct {
 	// Headers for the key computation.
 	Allowed []string
@@ -12,7 +12,7 @@ type Headers struct {
 	Disallowed []string
 }
 
-// A 'MetaFilter' represents an interface for filtering the headers
+// MetaFilter represents an interface for filtering the headers
 // before including the once in the key computation.
 //
 // It can be useful if you need to pick up only a few header
@@ -24,7 +24,7 @@ type Headers struct {
 // Having implemented your own version, you can control the headers
 // which will be involved in the key computation process.
 type MetaFilter interface {
-	// Returns true allowing to include the header in
+	// Allowed - returns true allowing to include the header in
 	// the key computation, otherwise returns false.
 	Allowed(key string, val []string) bool
 }

@@ -4,7 +4,7 @@
 
 package care
 
-// Memoization options. There are some options you can redefine
+// Options - memoization options. There are some options you can redefine
 // by your own implementation in order to have more flexibility.
 // 'Options' gives enough room space to do that.
 type Options struct {
@@ -20,7 +20,7 @@ type Options struct {
 	Cache Cache
 }
 
-// Makes a default options set, having filled
+// NewOptions - makes a default options set, having filled
 // all items by thread-safe implementations.
 func NewOptions() *Options {
 	opts := Options{

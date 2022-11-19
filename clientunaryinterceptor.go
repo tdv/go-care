@@ -49,7 +49,7 @@ func (s *unaryClientInterceptor) Unary() grpc.UnaryClientInterceptor {
 	}
 }
 
-// Makes a new unary client interceptor.
+// NewClientUnaryInterceptor makes a new unary client interceptor.
 // There will be panic if options is an empty pointer.
 func NewClientUnaryInterceptor(opts *Options) grpc.DialOption {
 	if opts == nil {

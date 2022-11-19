@@ -9,22 +9,23 @@ import (
 	"time"
 )
 
-// 'Methods' represents an interface that allows to define
+// Methods is representing an interface that allows to define
 // the service's methods which responses you want to cache.
 type Methods interface {
+	// Cacheable
 	// method - full method name
 	//
 	// Returns true and caching timeout if the method is found,
 	// otherwise false and timeout in this case does not matter.
 	Cacheable(method string) (bool, time.Duration)
 
-	// Allows to add method for caching.
+	// Add - allows to add method for caching.
 	// Returns the 'Methods' in order to be
 	// more convenient methods adding like a chain.
 	Add(method string, ttl time.Duration) Methods
 	// Remove the method from allowed to be cached.
 	Remove(method string)
-	// Removes all methods.
+	// Clean - removes all methods.
 	Clean()
 }
 

@@ -8,14 +8,14 @@ import (
 	"sync/atomic"
 )
 
-// A feature switch.
+// Switch is a switch feature.
 type Switch interface {
-	// Turns on the feature.
+	// TurnOn - turns on the feature.
 	TurnOn()
-	// Turns off the feature.
+	// TurnOff - turns off the feature.
 	TurnOff()
 
-	// Returns a state of the feature (turned on/off).
+	// IsTurnedOn - returns a state of the feature (turned on/off).
 	IsTurnedOn() bool
 }
 
