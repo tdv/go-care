@@ -50,8 +50,6 @@ func main() {
 
 	if memoization != nil && *memoization {
 		cache, err := rediscache.New(
-			ctx,
-			time.Millisecond*500,
 			*redishost,
 			*redisport,
 			*redisdb,

@@ -69,13 +69,7 @@ func main() {
 	var grpcsrv *grpc.Server
 
 	if memoization != nil && *memoization {
-		ctx := context.Background()
-		ctx, cancel := context.WithCancel(ctx)
-		defer cancel()
-
 		cache, err := rediscache.New(
-			ctx,
-			time.Millisecond*500,
 			*redishost,
 			*redisport,
 			*redisdb,

@@ -5,6 +5,7 @@
 package care
 
 import (
+	"context"
 	"errors"
 	"sync"
 	"time"
@@ -53,7 +54,7 @@ func (s *inMemoryCache) itemOnTop(v *value) {
 	}
 }
 
-func (s *inMemoryCache) Put(key string, val []byte, _ time.Duration) error {
+func (s *inMemoryCache) Put(_ context.Context, key string, val []byte, _ time.Duration) error {
 	if s.capacity < 1 {
 		return errors.New("There is no possibility for an insertion. The capacity is 0.")
 	}
@@ -110,7 +111,7 @@ func (s *inMemoryCache) Put(key string, val []byte, _ time.Duration) error {
 	return nil
 }
 
-func (s *inMemoryCache) Get(key string) ([]byte, error) {
+func (s *inMemoryCache) Get(_ context.Context, key string) ([]byte, error) {
 	s.mtx.Lock()
 	defer s.mtx.Unlock()
 

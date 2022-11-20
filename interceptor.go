@@ -83,13 +83,13 @@ func (s *interceptor) restoreResponse(typ reflect.Type, buf []byte) (resp interf
 	return val, err
 }
 
-func (s *interceptor) cacheResponse(key string, val interface{}, ttl time.Duration) error {
+func (s *interceptor) cacheResponse(ctx context.Context, key string, val interface{}, ttl time.Duration) error {
 	buf, err := json.Marshal(val)
 	if err != nil {
 		return err
 	}
 
-	return s.opts.Cache.Put(key, buf, ttl)
+	return s.opts.Cache.Put(ctx, key, buf, ttl)
 }
 
 func (s *interceptor) execute(
@@ -109,7 +109,7 @@ func (s *interceptor) execute(
 			} else {
 				typ, hasType := s.types.Get(key)
 				if hasType {
-					buf, err := s.opts.Cache.Get(key)
+					buf, err := s.opts.Cache.Get(ctx, key)
 					if err == nil && len(buf) > 0 {
 						if resp, err := s.restoreResponse(typ, buf); err == nil {
 							return resp, nil
@@ -128,7 +128,7 @@ func (s *interceptor) execute(
 					}
 				}
 
-				err = s.cacheResponse(key, resp, ttl)
+				err = s.cacheResponse(ctx, key, resp, ttl)
 				if err != nil {
 					log.Printf("Failed to cache the response. Error: %v\n", err)
 				}
