@@ -7,6 +7,12 @@ response computation lower cost.
 
 go-care is an abbreviation of the 'Cached Response in Go'.
 
+_**Caching might be almost a codeless solution.**_
+
+_**Adding a couple gRPC interceptors to the project enables the caching usage at the both sides (client-, server-side) out of the box. Pay more attention to the logic and less on the secondary  (caching at least).**_
+
+A few [examples](https://github.com/tdv/go-care/tree/main/examples) will make the start easier.
+
 # Introduction
 
 Having faced an issue of lack of the memoization in grpc this library has been written as a solution. Maybe there was a
