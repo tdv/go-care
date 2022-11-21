@@ -1,5 +1,5 @@
 [![build workflow](https://github.com/tdv/go-care/actions/workflows/main.yml/badge.svg?event=push)](https://github.com/tdv/go-care/actions)
-
+[![Go Reference](https://pkg.go.dev/badge/github.com/tdv/go-care.svg)](https://pkg.go.dev/github.com/tdv/go-care)
 # go-care
 
 A library for gRPC response memoization in Go aims to improve common performance of any project having made real
