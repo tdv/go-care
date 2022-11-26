@@ -151,6 +151,10 @@ func structs(t *testing.T) {
 		set[data] = struct{}{}
 		b.Reset()
 	}
+
+	if len(set) != 1 {
+		t.Error("Failed to make data for robust hashing from structs.")
+	}
 }
 
 func Test_robustHashingData(t *testing.T) {
