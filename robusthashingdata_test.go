@@ -9,7 +9,7 @@ import (
 
 func slices(t *testing.T) {
 	t.Parallel()
-	const items = 1000
+	const items = 100
 	s := make([]int, 0, items)
 	for i := 0; i < items; i++ {
 		s = append(s, i)
@@ -19,7 +19,7 @@ func slices(t *testing.T) {
 
 	b := strings.Builder{}
 	set := make(map[string]struct{})
-	const attempts = 1000
+	const attempts = 100
 
 	for k := 0; k < attempts; k++ {
 		rand.Shuffle(items, func(i, j int) { s[i], s[j] = s[j], s[i] })
