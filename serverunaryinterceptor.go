@@ -6,6 +6,7 @@ package care
 
 import (
 	"context"
+
 	"google.golang.org/grpc"
 )
 
@@ -45,4 +46,16 @@ func NewServerUnaryInterceptor(opts *Options) grpc.ServerOption {
 	}
 
 	return grpc.UnaryInterceptor(interceptor.Unary())
+}
+
+func NewServerInterceptor(opts *Options) grpc.UnaryServerInterceptor {
+	if opts == nil {
+		panic("The options must not be provided as a nil-pointer.")
+	}
+
+	interceptor := unaryServerInterceptor{
+		interceptor: newInterceptor(opts),
+	}
+
+	return interceptor.Unary()
 }
