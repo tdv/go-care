@@ -6,8 +6,9 @@ package care
 
 import (
 	"context"
-	"google.golang.org/grpc"
 	"reflect"
+
+	"google.golang.org/grpc"
 )
 
 type unaryClientInterceptor struct {
@@ -61,4 +62,16 @@ func NewClientUnaryInterceptor(opts *Options) grpc.DialOption {
 	}
 
 	return grpc.WithUnaryInterceptor(interceptor.Unary())
+}
+
+func NewClientInterceptor(opts *Options) grpc.UnaryClientInterceptor {
+	if opts == nil {
+		panic("The options must not be provided as a nil-pointer.")
+	}
+
+	interceptor := unaryClientInterceptor{
+		interceptor: newInterceptor(opts),
+	}
+
+	return interceptor.Unary()
 }
